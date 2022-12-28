@@ -1,104 +1,223 @@
 ﻿using System.Collections;
 
-string[] fileContents = System.IO.File.ReadAllLines("input.txt");
 
-// ArrayList stackList = new ArrayList();
-// ArrayList stackArrayList = new ArrayList();
-List<Stack<char>> stackList = new List<Stack<char>>();
-List<string> stackArrayList = new List<string>();
-bool finishedTable = false;
-bool skipLine = false;
-bool isFirstPass = true;
-foreach (string line in fileContents)
+static void part1()
 {
-    if (skipLine)
-    {
-        skipLine = false;
-        continue;
-    }
+    string[] fileContents = System.IO.File.ReadAllLines("input.txt");
 
-    // Console.WriteLine(line);
-    if (char.IsDigit(line[1]))
+    // ArrayList stackList = new ArrayList();
+    // ArrayList stackArrayList = new ArrayList();
+    List<Stack<char>> stackList = new List<Stack<char>>();
+    List<string> stackArrayList = new List<string>();
+    bool finishedTable = false;
+    bool skipLine = false;
+    bool isFirstPass = true;
+    foreach (string line in fileContents)
     {
-        finishedTable = true;
-        skipLine = true;
-
-        foreach (string stackString in stackArrayList)
+        if (skipLine)
         {
-            // Console.WriteLine(stackString);
-            string strippedString = stackString.Trim();
-            Stack<char> newStack = new Stack<char>();
-            for (int i=strippedString.Length-1; i > 0; i-=3)
-            {
-                newStack.Push(strippedString[i-1]);
-            }
-            stackList.Add(newStack);
+            skipLine = false;
+            continue;
         }
 
-        continue;
-    }
-
-    if (!finishedTable)
-    {
-        for (int i=0; i < line.Length; i+=4)
+        // Console.WriteLine(line);
+        if (char.IsDigit(line[1]))
         {
-            string box = line.Substring(i, 3);
-            // Console.WriteLine(box);
-            if (isFirstPass)
+            finishedTable = true;
+            skipLine = true;
+
+            foreach (string stackString in stackArrayList)
             {
-                stackArrayList.Add(box);
+                // Console.WriteLine(stackString);
+                string strippedString = stackString.Trim();
+                Stack<char> newStack = new Stack<char>();
+                for (int i=strippedString.Length-1; i > 0; i-=3)
+                {
+                    newStack.Push(strippedString[i-1]);
+                }
+                stackList.Add(newStack);
             }
-            else
+
+            continue;
+        }
+
+        if (!finishedTable)
+        {
+            for (int i=0; i < line.Length; i+=4)
             {
-                stackArrayList[i / 4] += box;
+                string box = line.Substring(i, 3);
+                // Console.WriteLine(box);
+                if (isFirstPass)
+                {
+                    stackArrayList.Add(box);
+                }
+                else
+                {
+                    stackArrayList[i / 4] += box;
+                }
+                // Console.ReadLine();
             }
+            isFirstPass = false;
+        }
+        else
+        {
+            // foreach (var stack in stackList)
+            // {
+            //     foreach(var ch in stack)
+            //     {
+            //         Console.Write(ch);
+            //     }
+            //     Console.WriteLine();
+            // }
+
+            string[] instructions = line.Split();
+            int numToMove = Int32.Parse(instructions[1]);
+            int locStack = Int32.Parse(instructions[3]);
+            int destStack = Int32.Parse(instructions[5]);
+
+            // Console.WriteLine($"How many: {numToMove}");
+            // Console.WriteLine($"From where: {locStack}");
+            // Console.WriteLine($"To where: {destStack}");
+
+            for (int i=0; i < numToMove; i++)
+            {
+                char popped = stackList[locStack-1].Pop();
+                stackList[destStack-1].Push(popped);
+            }
+
+            // foreach (var stack in stackList)
+            // {
+            //     foreach(var ch in stack)
+            //     {
+            //         Console.Write(ch);
+            //     }
+            //     Console.WriteLine();
+            // }
+
             // Console.ReadLine();
         }
-        isFirstPass = false;
-    }
-    else
-    {
-        // foreach (var stack in stackList)
-        // {
-        //     foreach(var ch in stack)
-        //     {
-        //         Console.Write(ch);
-        //     }
-        //     Console.WriteLine();
-        // }
-
-        string[] instructions = line.Split();
-        int numToMove = Int32.Parse(instructions[1]);
-        int locStack = Int32.Parse(instructions[3]);
-        int destStack = Int32.Parse(instructions[5]);
-
-        // Console.WriteLine($"How many: {numToMove}");
-        // Console.WriteLine($"From where: {locStack}");
-        // Console.WriteLine($"To where: {destStack}");
-
-        for (int i=0; i < numToMove; i++)
-        {
-            char popped = stackList[locStack-1].Pop();
-            stackList[destStack-1].Push(popped);
-        }
-
-        // foreach (var stack in stackList)
-        // {
-        //     foreach(var ch in stack)
-        //     {
-        //         Console.Write(ch);
-        //     }
-        //     Console.WriteLine();
-        // }
-
         // Console.ReadLine();
     }
-    // Console.ReadLine();
+
+    string topOfEachStack = "";
+    foreach (var stack in stackList)
+    {
+        topOfEachStack += stack.Peek();
+    }
+    Console.WriteLine(topOfEachStack);
 }
 
-string topOfEachStack = "";
-foreach (var stack in stackList)
+static void part2()
 {
-    topOfEachStack += stack.Peek();
+    string[] fileContents = System.IO.File.ReadAllLines("input.txt");
+
+    // List<Stack<char>> stackList = new List<Stack<char>>();
+    List<string> stackList = new List<string>();
+    List<string> stackArrayList = new List<string>();
+    bool finishedTable = false;
+    bool skipLine = false;
+    bool isFirstPass = true;
+    foreach (string line in fileContents)
+    {
+        if (skipLine)
+        {
+            skipLine = false;
+            continue;
+        }
+
+        // Console.WriteLine(line);
+        if (char.IsDigit(line[1]))
+        {
+            finishedTable = true;
+            skipLine = true;
+
+            foreach (string stackString in stackArrayList)
+            {
+                // Console.WriteLine(stackString);
+                string strippedString = stackString.Trim();
+                // Stack<char> newStack = new Stack<char>();
+                string newStack = "";
+                for (int i=strippedString.Length-1; i > 0; i-=3)
+                {
+                    newStack += strippedString[i-1];
+                }
+                stackList.Add(newStack);
+            }
+
+            continue;
+        }
+
+        if (!finishedTable)
+        {
+            for (int i=0; i < line.Length; i+=4)
+            {
+                string box = line.Substring(i, 3);
+                // Console.WriteLine(box);
+                if (isFirstPass)
+                {
+                    stackArrayList.Add(box);
+                }
+                else
+                {
+                    stackArrayList[i / 4] += box;
+                }
+                // Console.ReadLine();
+            }
+            isFirstPass = false;
+        }
+        else
+        {
+            // foreach (var stack in stackList)
+            // {
+            //     foreach(var ch in stack)
+            //     {
+            //         Console.Write(ch);
+            //     }
+            //     Console.WriteLine();
+            // }
+
+            string[] instructions = line.Split();
+            int numToMove = Int32.Parse(instructions[1]);
+            int locStack = Int32.Parse(instructions[3]);
+            int destStack = Int32.Parse(instructions[5]);
+
+            Console.WriteLine($"How many: {numToMove}");
+            Console.WriteLine($"From where: {locStack}");
+            Console.WriteLine($"To where: {destStack}");
+
+            string sourceString = stackList[locStack-1];
+            string destString = stackList[destStack-1];
+
+            Console.WriteLine($"Source string: {sourceString}");
+            Console.WriteLine($"Destination string: {destString}");
+
+            string newSource = sourceString.Substring(0, sourceString.Length-numToMove);
+            string newDest = destString + sourceString.Substring(sourceString.Length-numToMove);
+
+            stackList[locStack-1] = newSource;
+            stackList[destStack-1] = newDest;
+            Console.WriteLine("Resulting strings");
+            Console.WriteLine($"Source: {stackList[locStack-1]}");
+            Console.WriteLine($"Destination: {stackList[destStack-1]}");
+
+            Console.WriteLine("Full Results");
+            foreach (var stack in stackList)
+            {
+                Console.WriteLine(stack);
+            }
+            Console.WriteLine();
+
+            // Console.ReadLine();
+        }
+        // Console.ReadLine();
+    }
+
+    string topOfEachStack = "";
+    foreach (var stack in stackList)
+    {
+        topOfEachStack += stack[^1];
+    }
+    Console.WriteLine(topOfEachStack);
 }
-Console.WriteLine(topOfEachStack);
+
+part2();
