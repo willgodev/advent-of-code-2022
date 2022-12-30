@@ -26,8 +26,6 @@
         {
             numOverlappingPairs += 1;
         }
-
-        // Console.ReadLine();
     }
 
     Console.WriteLine(numOverlappingPairs);
@@ -40,7 +38,6 @@ static void part2()
     int numOverlappingPairs = 0;
     foreach (string line in fileContents)
     {
-        // Console.WriteLine(line);
         string[] assignments = line.Split(",");
         string assignmentOne = assignments[0];
         string assignmentTwo = assignments[1];
@@ -55,21 +52,16 @@ static void part2()
 
         if (assignmentOne_One >= assignmentTwo_One && assignmentOne_One <= assignmentTwo_Two)
         {
-            // Console.WriteLine("Overlap1");
             numOverlappingPairs += 1;
         }
         else if (assignmentOne_Two >= assignmentTwo_One && assignmentOne_Two <= assignmentTwo_Two)
         {
-            // Console.WriteLine("Overlap2");
             numOverlappingPairs += 1;
         }
         else if (assignmentTwo_One >= assignmentOne_One && assignmentTwo_One <= assignmentOne_Two)
         {
-            // Console.WriteLine("Overlap3");
             numOverlappingPairs += 1;
         }
-
-        // Console.ReadLine();
     }
 
     Console.WriteLine(numOverlappingPairs);

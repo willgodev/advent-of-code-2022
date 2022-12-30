@@ -15,7 +15,6 @@
         Console.WriteLine(compartmentTwo);
         char sharedChar = string.Join("", compartmentOne.Intersect(compartmentTwo))[0];
         Console.WriteLine(sharedChar);
-        // Console.ReadLine();
 
         if (char.IsUpper(sharedChar))
         {
@@ -29,7 +28,6 @@
         }
 
         Console.WriteLine(totalPriorities);
-        // Console.ReadLine();
     }
 }
 
@@ -76,8 +74,6 @@ static void part2()
             badgeId = ' ';
             Console.WriteLine(totalPriorities);
         }
-
-        // Console.ReadLine();
     }
 
     badgeId = (char) commonSubstring[0];

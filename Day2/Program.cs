@@ -85,9 +85,6 @@ static void part1()
         }
 
         myScore += moveScores[myMove];
-        // Console.WriteLine($"Opponent: {opponentMoveMap[opponentMove]}, You: {myMoveMap[myMove]}");
-        // Console.WriteLine(myScore);
-        // Console.ReadLine();
     }
 
     Console.WriteLine(myScore);
@@ -170,10 +167,6 @@ static void part2()
             default:
                 break;
         }
-
-        // Console.WriteLine($"Opponent: {opponentMoveMap[opponentMove]}, Result: {result}");
-        // Console.WriteLine(myScore);
-        // Console.ReadLine();
     }
 
     Console.WriteLine(myScore);
