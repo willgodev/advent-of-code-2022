@@ -2,6 +2,7 @@
 
 Stack<string> directoryStack = new Stack<string>();
 Dictionary<string, List<string>> directoryTree = new Dictionary<string, List<string>>();
+Dictionary<string, int> directorySizes = new Dictionary<string, int>();
 
 foreach (string line in fileContents)
 {
@@ -17,11 +18,19 @@ foreach (string line in fileContents)
             case "cd":
                 Console.WriteLine("Handle cd");
                 string targetDir = termArgs[2];
-                directoryStack.Push(targetDir);
                 if (targetDir != "/")
                 {
                     string curDir = directoryStack.Peek();
-                    directoryTree[curDir].Append(targetDir);
+                    directoryStack.Push(targetDir);
+                    directoryTree[curDir].Add(targetDir);
+                    directoryTree[targetDir] = new List<string>();
+                    directorySizes[targetDir] = 0;
+                }
+                else
+                {
+                    directoryStack.Push(targetDir);
+                    directoryTree[targetDir] = new List<string>();
+                    directorySizes[targetDir] = 0;
                 }
                 break;
             case "ls":
@@ -34,8 +43,37 @@ foreach (string line in fileContents)
     // Process Output
     else
     {
-
+        string[] lsOutput = line.Split();
+        string curDir = directoryStack.Peek();
+        // Handle directory listing
+        if (lsOutput[0] == "dir")
+        {
+            directoryTree[curDir].Add(lsOutput[1]);
+        }
+        // Handle file listing
+        else
+        {
+            directorySizes[curDir] += Int32.Parse(lsOutput[0]);
+        }
     }
 
-    Console.ReadLine();
+    Console.WriteLine($"Current dir: {directoryStack.Peek()}");
+
+    Console.WriteLine("---Directory Structure---");
+    foreach (var kvp in directoryTree)
+    {
+        Console.WriteLine($"{kvp.Key}");
+        foreach (var dir in kvp.Value)
+        {
+            Console.WriteLine($"---{dir}");
+        }
+    }
+
+    Console.WriteLine("---Directory Sizes---");
+    foreach (var kvp in directorySizes)
+    {
+        Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+    }
+
+    // Console.ReadLine();
 }
