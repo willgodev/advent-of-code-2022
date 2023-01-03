@@ -18,17 +18,21 @@ foreach (string line in fileContents)
             case "cd":
                 Console.WriteLine("Handle cd");
                 string targetDir = termArgs[2];
-                if (targetDir != "/")
+                if (targetDir == "/")
+                {
+                    directoryStack.Push(targetDir);
+                    directoryTree[targetDir] = new List<string>();
+                    directorySizes[targetDir] = 0;
+                }
+                else if (targetDir == "..")
+                {
+                    directoryStack.Pop();
+                }
+                else
                 {
                     string curDir = directoryStack.Peek();
                     directoryStack.Push(targetDir);
                     directoryTree[curDir].Add(targetDir);
-                    directoryTree[targetDir] = new List<string>();
-                    directorySizes[targetDir] = 0;
-                }
-                else
-                {
-                    directoryStack.Push(targetDir);
                     directoryTree[targetDir] = new List<string>();
                     directorySizes[targetDir] = 0;
                 }
@@ -75,5 +79,5 @@ foreach (string line in fileContents)
         Console.WriteLine($"{kvp.Key}: {kvp.Value}");
     }
 
-    // Console.ReadLine();
+    Console.ReadLine();
 }
