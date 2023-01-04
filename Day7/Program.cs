@@ -6,7 +6,7 @@ Dictionary<string, int> directorySizes = new Dictionary<string, int>();
 
 foreach (string line in fileContents)
 {
-    Console.WriteLine(line);
+    // Console.WriteLine(line);
 
     string[] termArgs = line.Split();
 
@@ -16,7 +16,7 @@ foreach (string line in fileContents)
         switch(termArgs[1])
         {
             case "cd":
-                Console.WriteLine("Handle cd");
+                // Console.WriteLine("Handle cd");
                 string targetDir = termArgs[2];
                 if (targetDir == "/")
                 {
@@ -38,7 +38,7 @@ foreach (string line in fileContents)
                 }
                 break;
             case "ls":
-                Console.WriteLine("Handle ls");
+                // Console.WriteLine("Handle ls");
                 break;
             default:
                 throw new Exception("Parsed unrecognized command");
@@ -57,27 +57,50 @@ foreach (string line in fileContents)
         // Handle file listing
         else
         {
-            directorySizes[curDir] += Int32.Parse(lsOutput[0]);
+            foreach (string dir in directoryStack)
+            {
+                Console.WriteLine($"Adding size to {dir}");
+                directorySizes[dir] += Int32.Parse(lsOutput[0]);
+            }
+            // directorySizes[curDir] += Int32.Parse(lsOutput[0]);
         }
     }
 
-    Console.WriteLine($"Current dir: {directoryStack.Peek()}");
+    // Console.WriteLine($"Current dir: {directoryStack.Peek()}");
 
-    Console.WriteLine("---Directory Structure---");
-    foreach (var kvp in directoryTree)
-    {
-        Console.WriteLine($"{kvp.Key}");
-        foreach (var dir in kvp.Value)
-        {
-            Console.WriteLine($"---{dir}");
-        }
-    }
+    // Console.WriteLine("---Directory Structure---");
+    // foreach (var kvp in directoryTree)
+    // {
+    //     Console.WriteLine($"{kvp.Key}");
+    //     foreach (var dir in kvp.Value)
+    //     {
+    //         Console.WriteLine($"---{dir}");
+    //     }
+    // }
 
-    Console.WriteLine("---Directory Sizes---");
-    foreach (var kvp in directorySizes)
+    // Console.WriteLine("---Directory Sizes---");
+    // foreach (var kvp in directorySizes)
+    // {
+    //     Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+    // }
+
+    // Console.ReadLine();
+}
+
+// Console.WriteLine("---Directory Sizes---");
+// foreach (var kvp in directorySizes)
+// {
+//     Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+// }
+
+int answer = 0;
+foreach (var kvp in directorySizes)
+{
+    if (kvp.Value <= 100000)
     {
         Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+        answer += kvp.Value;
     }
-
-    Console.ReadLine();
 }
+
+Console.WriteLine(answer);
