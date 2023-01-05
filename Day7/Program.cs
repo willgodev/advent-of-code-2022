@@ -4,9 +4,10 @@ Stack<string> directoryStack = new Stack<string>();
 Dictionary<string, List<string>> directoryTree = new Dictionary<string, List<string>>();
 Dictionary<string, int> directorySizes = new Dictionary<string, int>();
 
+// TODO - Modify this to handle directories with same name but different path
 foreach (string line in fileContents)
 {
-    // Console.WriteLine(line);
+    Console.WriteLine(line);
 
     string[] termArgs = line.Split();
 
@@ -78,13 +79,13 @@ foreach (string line in fileContents)
     //     }
     // }
 
-    // Console.WriteLine("---Directory Sizes---");
-    // foreach (var kvp in directorySizes)
-    // {
-    //     Console.WriteLine($"{kvp.Key}: {kvp.Value}");
-    // }
+    Console.WriteLine("---Directory Sizes---");
+    foreach (var kvp in directorySizes)
+    {
+        Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+    }
 
-    // Console.ReadLine();
+    Console.ReadLine();
 }
 
 // Console.WriteLine("---Directory Sizes---");
