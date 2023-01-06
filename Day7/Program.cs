@@ -1,4 +1,9 @@
-﻿string[] fileContents = System.IO.File.ReadAllLines("input.txt");
+﻿static string getDirectoryString(Stack<string> dirStack)
+{
+    return String.Join("\\", dirStack.Reverse());
+}
+
+string[] fileContents = System.IO.File.ReadAllLines("input.txt");
 
 Stack<string> directoryStack = new Stack<string>();
 Dictionary<string, List<string>> directoryTree = new Dictionary<string, List<string>>();
@@ -7,8 +12,6 @@ Dictionary<string, int> directorySizes = new Dictionary<string, int>();
 // TODO - Modify this to handle directories with same name but different path
 foreach (string line in fileContents)
 {
-    Console.WriteLine(line);
-
     string[] termArgs = line.Split();
 
     // Handle Command
@@ -17,13 +20,13 @@ foreach (string line in fileContents)
         switch(termArgs[1])
         {
             case "cd":
-                // Console.WriteLine("Handle cd");
                 string targetDir = termArgs[2];
                 if (targetDir == "/")
                 {
                     directoryStack.Push(targetDir);
                     directoryTree[targetDir] = new List<string>();
-                    directorySizes[targetDir] = 0;
+                    string stackString = getDirectoryString(directoryStack);
+                    directorySizes[stackString] = 0;
                 }
                 else if (targetDir == "..")
                 {
@@ -35,11 +38,11 @@ foreach (string line in fileContents)
                     directoryStack.Push(targetDir);
                     directoryTree[curDir].Add(targetDir);
                     directoryTree[targetDir] = new List<string>();
-                    directorySizes[targetDir] = 0;
+                    string stackString = getDirectoryString(directoryStack);
+                    directorySizes[stackString] = 0;
                 }
                 break;
             case "ls":
-                // Console.WriteLine("Handle ls");
                 break;
             default:
                 throw new Exception("Parsed unrecognized command");
@@ -58,12 +61,21 @@ foreach (string line in fileContents)
         // Handle file listing
         else
         {
-            foreach (string dir in directoryStack)
+            string stackString = getDirectoryString(directoryStack);
+            string[] stackPaths = stackString.Split("\\");
+            string pathBuilder = "";
+            for (int i=0; i < stackPaths.Length; i++)
             {
-                Console.WriteLine($"Adding size to {dir}");
-                directorySizes[dir] += Int32.Parse(lsOutput[0]);
+                if (i == 0)
+                {
+                    pathBuilder = stackPaths[i];
+                }
+                else
+                {
+                    pathBuilder = pathBuilder + "\\" + stackPaths[i];
+                }
+                directorySizes[pathBuilder] += Int32.Parse(lsOutput[0]);
             }
-            // directorySizes[curDir] += Int32.Parse(lsOutput[0]);
         }
     }
 
@@ -79,27 +91,14 @@ foreach (string line in fileContents)
     //     }
     // }
 
-    Console.WriteLine("---Directory Sizes---");
-    foreach (var kvp in directorySizes)
-    {
-        Console.WriteLine($"{kvp.Key}: {kvp.Value}");
-    }
-
-    Console.ReadLine();
+    // Console.ReadLine();
 }
-
-// Console.WriteLine("---Directory Sizes---");
-// foreach (var kvp in directorySizes)
-// {
-//     Console.WriteLine($"{kvp.Key}: {kvp.Value}");
-// }
 
 int answer = 0;
 foreach (var kvp in directorySizes)
 {
     if (kvp.Value <= 100000)
     {
-        Console.WriteLine($"{kvp.Key}: {kvp.Value}");
         answer += kvp.Value;
     }
 }
