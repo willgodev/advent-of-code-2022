@@ -9,6 +9,9 @@ Stack<string> directoryStack = new Stack<string>();
 Dictionary<string, List<string>> directoryTree = new Dictionary<string, List<string>>();
 Dictionary<string, int> directorySizes = new Dictionary<string, int>();
 
+int totalDiskSpace = 70000000;
+int neededDiskSpace = 30000000;
+
 // TODO - Modify this to handle directories with same name but different path
 foreach (string line in fileContents)
 {
@@ -104,3 +107,17 @@ foreach (var kvp in directorySizes)
 }
 
 Console.WriteLine(answer);
+
+int totalUsedDiskSpace = directorySizes["/"];
+int currentUnusedSpace = totalDiskSpace - totalUsedDiskSpace;
+int spaceToFree = neededDiskSpace - currentUnusedSpace;
+
+int smallestSize = totalUsedDiskSpace;
+foreach (var kvp in directorySizes)
+{
+    if (kvp.Value >= spaceToFree && kvp.Value < smallestSize)
+    {
+        smallestSize = kvp.Value;
+    }
+}
+Console.WriteLine(smallestSize);
