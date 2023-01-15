@@ -26,7 +26,28 @@
     }
 }
 
+static (int, int) calculateTailDirection((int, int) head, (int, int) tail)
+{
+    (int, int) targetDirection = (0, 0);
+
+    if (Math.Abs(head.Item1 - tail.Item1) <= 1 && 
+        Math.Abs(head.Item2 - tail.Item2) <= 1)
+    {
+        return targetDirection;
+    }
+
+    return targetDirection;
+}
+
 string[] fileContents = System.IO.File.ReadAllLines("input.txt");
+
+Dictionary<string, (int, int)> directionMap = new Dictionary<string, (int, int)>
+{
+    { "U", (-1, 0) },
+    { "D", (1, 0) },
+    { "L", (0, -1) },
+    { "R", (0, 1) }
+};
 
 int maxSteps = 0;
 foreach (string line in fileContents)
@@ -60,3 +81,24 @@ Console.WriteLine(halfMaxSteps);
 (int, int) tail = (halfMaxSteps, halfMaxSteps);
 
 printGrid(grid, start, head, tail);
+
+foreach (string line in fileContents)
+{
+    // Console.WriteLine(line);
+    string[] move = line.Split();
+    string direction = move[0];
+    int numSteps = int.Parse(move[1]);
+    Console.WriteLine($"Direction: {direction}, Steps: {numSteps}");
+
+    (int, int) new_head;
+    (int, int) head_direction = directionMap[direction];
+    head_direction.Item1 *= numSteps;
+    head_direction.Item2 *= numSteps;
+    new_head.Item1 = head.Item1 + head_direction.Item1;
+    new_head.Item2 = head.Item2 + head_direction.Item2;
+    head = new_head;
+
+    printGrid(grid, start, head, tail);
+
+    Console.Read();
+}
