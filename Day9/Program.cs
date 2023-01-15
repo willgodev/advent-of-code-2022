@@ -80,7 +80,7 @@ Console.WriteLine(halfMaxSteps);
 (int, int) head = (halfMaxSteps, halfMaxSteps);
 (int, int) tail = (halfMaxSteps, halfMaxSteps);
 
-printGrid(grid, start, head, tail);
+// printGrid(grid, start, head, tail);
 
 foreach (string line in fileContents)
 {
@@ -100,5 +100,5 @@ foreach (string line in fileContents)
 
     printGrid(grid, start, head, tail);
 
-    Console.Read();
+    // Console.Read();
 }
