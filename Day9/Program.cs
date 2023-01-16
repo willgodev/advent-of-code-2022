@@ -30,10 +30,32 @@ static (int, int) calculateTailDirection((int, int) head, (int, int) tail)
 {
     (int, int) targetDirection = (0, 0);
 
+    // Head and Tail are close enough, so don't move tail
     if (Math.Abs(head.Item1 - tail.Item1) <= 1 && 
         Math.Abs(head.Item2 - tail.Item2) <= 1)
     {
         return targetDirection;
+    }
+
+    if (head.Item1 - tail.Item1 >= 2)
+    {
+        // Move Tail down
+        return (1, 0);
+    }
+    else if (head.Item1 - tail.Item1 <= -2)
+    {
+        // Move Tail up
+        return (-1, 0);
+    }
+    else if (head.Item2 - tail.Item2 >= 2)
+    {
+        // Move Tail right
+        return (0, 1);
+    }
+    else if (head.Item2 - tail.Item2 <= -2)
+    {
+        // Move Tail left
+        return (0, -1);
     }
 
     return targetDirection;
@@ -98,7 +120,15 @@ foreach (string line in fileContents)
     new_head.Item2 = head.Item2 + head_direction.Item2;
     head = new_head;
 
+    (int, int) new_tail;
+    (int, int) tail_direction = calculateTailDirection(head, tail);
+    tail_direction.Item1 *= Math.Abs(head.Item1 - tail.Item1)-1;
+    tail_direction.Item2 *= Math.Abs(head.Item2 - tail.Item2)-1;
+    new_tail.Item1 = tail.Item1 + tail_direction.Item1;
+    new_tail.Item2 = tail.Item2 + tail_direction.Item2;
+    tail = new_tail;
+
     printGrid(grid, start, head, tail);
 
-    // Console.Read();
+    Console.Read();
 }
