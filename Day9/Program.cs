@@ -104,6 +104,8 @@ Console.WriteLine(halfMaxSteps);
 
 // printGrid(grid, start, head, tail);
 
+HashSet<(int, int)> spacesVisitedByTail = new HashSet<(int, int)>();
+spacesVisitedByTail.Add(start);
 foreach (string line in fileContents)
 {
     // Console.WriteLine(line);
@@ -127,8 +129,11 @@ foreach (string line in fileContents)
     new_tail.Item1 = tail.Item1 + tail_direction.Item1;
     new_tail.Item2 = tail.Item2 + tail_direction.Item2;
     tail = new_tail;
+    spacesVisitedByTail.Add(tail);
 
-    printGrid(grid, start, head, tail);
+    // printGrid(grid, start, head, tail);
 
-    Console.Read();
+    // Console.Read();
 }
+
+Console.WriteLine(spacesVisitedByTail.Count);
