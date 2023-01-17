@@ -1,21 +1,25 @@
-﻿static void printGrid(string[,] grid, (int, int) start, (int, int) head, (int, int) tail)
+﻿static void printGrid(string[,] grid, (int, int) start, (int, int) head, (int, int) tail, HashSet<(int, int)> spacesVisitedByTail)
 {
     Console.WriteLine();
     for (int i=0; i < grid.GetLength(0); i++)
     {
         for (int j=0; j < grid.GetLength(1); j++)
         {
-            if (i == start.Item1 && j == start.Item2)
-            {
-                Console.Write("s");
-            }
-            else if (i == head.Item1 && j == head.Item2)
+            if (i == head.Item1 && j == head.Item2)
             {
                 Console.Write("H");
             }
             else if (i == tail.Item1 && j == tail.Item2)
             {
                 Console.Write("T");
+            }
+            else if (spacesVisitedByTail.Contains((i, j)))
+            {
+                Console.Write("#");
+            }
+            else if (i == start.Item1 && j == start.Item2)
+            {
+                Console.Write("s");
             }
             else
             {
@@ -61,7 +65,8 @@ static (int, int) calculateTailDirection((int, int) head, (int, int) tail)
     return targetDirection;
 }
 
-string[] fileContents = System.IO.File.ReadAllLines("input.txt");
+// string[] fileContents = System.IO.File.ReadAllLines("input.txt");
+string[] fileContents = System.IO.File.ReadAllLines("smol.txt");
 
 Dictionary<string, (int, int)> directionMap = new Dictionary<string, (int, int)>
 {
@@ -124,16 +129,42 @@ foreach (string line in fileContents)
 
     (int, int) new_tail;
     (int, int) tail_direction = calculateTailDirection(head, tail);
-    tail_direction.Item1 *= Math.Abs(head.Item1 - tail.Item1)-1;
-    tail_direction.Item2 *= Math.Abs(head.Item2 - tail.Item2)-1;
-    new_tail.Item1 = tail.Item1 + tail_direction.Item1;
-    new_tail.Item2 = tail.Item2 + tail_direction.Item2;
-    tail = new_tail;
-    spacesVisitedByTail.Add(tail);
+    if (tail_direction.Item1 != 0)
+    {
+        int numTailSteps = Math.Abs(head.Item1 - tail.Item1) - 1;
+        for (int i=0; i < numTailSteps; i++)
+        {
+            new_tail.Item1 = tail.Item1 + tail_direction.Item1;
+            new_tail.Item2 = tail.Item2;
+            tail = new_tail;
+            spacesVisitedByTail.Add(tail);
+        }
+    }
+    else if (tail_direction.Item2 != 0)
+    {
+        int numTailSteps = Math.Abs(head.Item2 - tail.Item2) - 1;
+        for (int i=0; i < numTailSteps; i++)
+        {
+            new_tail.Item1 = tail.Item1;
+            new_tail.Item2 = tail.Item2 + tail_direction.Item2;
+            tail = new_tail;
+            spacesVisitedByTail.Add(tail);
+        }
+    }
 
-    // printGrid(grid, start, head, tail);
+    // Console.WriteLine(spacesVisitedByTail.Count);
 
-    // Console.Read();
+    printGrid(grid, start, head, tail, spacesVisitedByTail);
+
+    foreach (var space in spacesVisitedByTail)
+    {
+        Console.Write(space);
+        Console.Write(", ");
+    }
+    Console.WriteLine();
+    Console.WriteLine(spacesVisitedByTail.Count);
+
+    Console.Read();
 }
 
 Console.WriteLine(spacesVisitedByTail.Count);
