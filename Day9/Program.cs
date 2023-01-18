@@ -164,7 +164,7 @@ foreach (string line in fileContents)
     Console.WriteLine();
     Console.WriteLine(spacesVisitedByTail.Count);
 
-    Console.Read();
+    Console.ReadLine();
 }
 
 Console.WriteLine(spacesVisitedByTail.Count);
