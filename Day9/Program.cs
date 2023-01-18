@@ -41,6 +41,7 @@ static (int, int) calculateTailDirection((int, int) head, (int, int) tail)
         return targetDirection;
     }
 
+    // Row Check
     if (head.Item1 - tail.Item1 >= 2)
     {
         // Move Tail down
@@ -51,6 +52,7 @@ static (int, int) calculateTailDirection((int, int) head, (int, int) tail)
         // Move Tail up
         return (-1, 0);
     }
+    // Column Check
     else if (head.Item2 - tail.Item2 >= 2)
     {
         // Move Tail right
@@ -65,8 +67,8 @@ static (int, int) calculateTailDirection((int, int) head, (int, int) tail)
     return targetDirection;
 }
 
-// string[] fileContents = System.IO.File.ReadAllLines("input.txt");
-string[] fileContents = System.IO.File.ReadAllLines("smol.txt");
+string[] fileContents = System.IO.File.ReadAllLines("input.txt");
+// string[] fileContents = System.IO.File.ReadAllLines("smol.txt");
 
 Dictionary<string, (int, int)> directionMap = new Dictionary<string, (int, int)>
 {
@@ -135,7 +137,18 @@ foreach (string line in fileContents)
         for (int i=0; i < numTailSteps; i++)
         {
             new_tail.Item1 = tail.Item1 + tail_direction.Item1;
-            new_tail.Item2 = tail.Item2;
+            if (head.Item2 - tail.Item2 == 1)
+            {
+                new_tail.Item2 = tail.Item2 + 1;
+            }
+            else if (head.Item2 - tail.Item2 == -1)
+            {
+                new_tail.Item2 = tail.Item2 - 1;
+            }
+            else
+            {
+                new_tail.Item2 = tail.Item2;
+            }
             tail = new_tail;
             spacesVisitedByTail.Add(tail);
         }
@@ -145,8 +158,19 @@ foreach (string line in fileContents)
         int numTailSteps = Math.Abs(head.Item2 - tail.Item2) - 1;
         for (int i=0; i < numTailSteps; i++)
         {
-            new_tail.Item1 = tail.Item1;
             new_tail.Item2 = tail.Item2 + tail_direction.Item2;
+            if (head.Item1 - tail.Item1 == 1)
+            {
+                new_tail.Item1 = tail.Item1 + 1;
+            }
+            else if (head.Item1 - tail.Item1 == -1)
+            {
+                new_tail.Item1 = tail.Item1 - 1;
+            }
+            else
+            {
+                new_tail.Item1 = tail.Item1;
+            }
             tail = new_tail;
             spacesVisitedByTail.Add(tail);
         }
@@ -154,17 +178,17 @@ foreach (string line in fileContents)
 
     // Console.WriteLine(spacesVisitedByTail.Count);
 
-    printGrid(grid, start, head, tail, spacesVisitedByTail);
+    // printGrid(grid, start, head, tail, spacesVisitedByTail);
 
-    foreach (var space in spacesVisitedByTail)
-    {
-        Console.Write(space);
-        Console.Write(", ");
-    }
-    Console.WriteLine();
-    Console.WriteLine(spacesVisitedByTail.Count);
+    // foreach (var space in spacesVisitedByTail)
+    // {
+    //     Console.Write(space);
+    //     Console.Write(", ");
+    // }
+    // Console.WriteLine();
+    // Console.WriteLine(spacesVisitedByTail.Count);
 
-    Console.ReadLine();
+    // Console.ReadLine();
 }
 
 Console.WriteLine(spacesVisitedByTail.Count);
