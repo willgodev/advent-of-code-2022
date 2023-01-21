@@ -30,6 +30,15 @@
     }
 }
 
+static (int, int) calculateNextMove((int, int) head, (int, int) tail)
+{
+    (int, int) targetDirection = (0, 0);
+
+    targetDirection = calculateTailDirection(head, tail);
+
+    return targetDirection;
+}
+
 static (int, int) calculateTailDirection((int, int) head, (int, int) tail)
 {
     (int, int) targetDirection = (0, 0);
@@ -340,4 +349,5 @@ static void part2()
 
     Console.WriteLine(spacesVisitedByTail.Count);
 }
+
 part2();
