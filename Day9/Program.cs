@@ -30,11 +30,34 @@
     }
 }
 
-static (int, int) calculateNextMove((int, int) head, (int, int) tail)
+static (int, int) calculateNextMove((int, int) currentPosition, (int, int) targetPosition)
 {
     (int, int) targetDirection = (0, 0);
 
-    targetDirection = calculateTailDirection(head, tail);
+    targetDirection = calculateTailDirection(currentPosition, targetPosition);
+
+    if (targetDirection.Item1 != 0)
+    {
+        if (currentPosition.Item2 - targetPosition.Item2 == 1)
+        {
+            targetDirection.Item2 = 1;
+        }
+        else if (currentPosition.Item2 - targetPosition.Item2 == -1)
+        {
+            targetDirection.Item2 = -1;
+        }
+    }
+    else if (targetDirection.Item2 != 0)
+    {
+        if (currentPosition.Item1 - targetPosition.Item1 == 1)
+        {
+            targetDirection.Item1 = 1;
+        }
+        else if (currentPosition.Item1 - targetPosition.Item1 == -1)
+        {
+            targetDirection.Item1 = -1;
+        }
+    }
 
     return targetDirection;
 }
