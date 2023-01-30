@@ -248,7 +248,7 @@ static void part2()
         string[] move = line.Split();
         string direction = move[0];
         int numSteps = int.Parse(move[1]);
-        Console.WriteLine($"Direction: {direction}, Steps: {numSteps}");
+        // Console.WriteLine($"Direction: {direction}, Steps: {numSteps}");
         maxSteps = Math.Max(maxSteps, numSteps);
     }
 
@@ -281,14 +281,9 @@ static void part2()
     }
     knotPositions.Add(tail);
 
-    foreach (var knot in knotPositions)
-    {
-        Console.WriteLine(knot);
-    }
-
-    Console.ReadLine();
-
     // printGrid(grid, start, head, tail);
+
+    // END OF INITIALIZATION
 
     HashSet<(int, int)> spacesVisitedByTail = new HashSet<(int, int)>();
     spacesVisitedByTail.Add(start);
@@ -300,74 +295,85 @@ static void part2()
         int numSteps = int.Parse(move[1]);
         Console.WriteLine($"Direction: {direction}, Steps: {numSteps}");
 
-        (int, int) new_head;
-        (int, int) head_direction = directionMap[direction];
-        head_direction.Item1 *= numSteps;
-        head_direction.Item2 *= numSteps;
-        new_head.Item1 = head.Item1 + head_direction.Item1;
-        new_head.Item2 = head.Item2 + head_direction.Item2;
-        head = new_head;
+        // (int, int) new_head;
+        // (int, int) head_direction = directionMap[direction];
+        // head_direction.Item1 *= numSteps;
+        // head_direction.Item2 *= numSteps;
+        // new_head.Item1 = head.Item1 + head_direction.Item1;
+        // new_head.Item2 = head.Item2 + head_direction.Item2;
+        // head = new_head;
 
-        (int, int) new_tail;
-        (int, int) tail_direction = calculateTailDirection(head, tail);
-        if (tail_direction.Item1 != 0)
+        for (int i=0; i < numSteps; i++)
         {
-            int numTailSteps = Math.Abs(head.Item1 - tail.Item1) - 1;
-            for (int i=0; i < numTailSteps; i++)
+
+            (int, int) new_head;
+            (int, int) head_direction = directionMap[direction];
+            new_head.Item1 = head.Item1 + head_direction.Item1;
+            new_head.Item2 = head.Item2 + head_direction.Item2;
+            head = new_head;
+
+            printGrid(grid, start, head, tail, spacesVisitedByTail);
+
+            foreach (var space in spacesVisitedByTail)
             {
-                new_tail.Item1 = tail.Item1 + tail_direction.Item1;
-                if (head.Item2 - tail.Item2 == 1)
-                {
-                    new_tail.Item2 = tail.Item2 + 1;
-                }
-                else if (head.Item2 - tail.Item2 == -1)
-                {
-                    new_tail.Item2 = tail.Item2 - 1;
-                }
-                else
-                {
-                    new_tail.Item2 = tail.Item2;
-                }
-                tail = new_tail;
-                spacesVisitedByTail.Add(tail);
+                Console.Write(space);
+                Console.Write(", ");
             }
-        }
-        else if (tail_direction.Item2 != 0)
-        {
-            int numTailSteps = Math.Abs(head.Item2 - tail.Item2) - 1;
-            for (int i=0; i < numTailSteps; i++)
-            {
-                new_tail.Item2 = tail.Item2 + tail_direction.Item2;
-                if (head.Item1 - tail.Item1 == 1)
-                {
-                    new_tail.Item1 = tail.Item1 + 1;
-                }
-                else if (head.Item1 - tail.Item1 == -1)
-                {
-                    new_tail.Item1 = tail.Item1 - 1;
-                }
-                else
-                {
-                    new_tail.Item1 = tail.Item1;
-                }
-                tail = new_tail;
-                spacesVisitedByTail.Add(tail);
-            }
+            Console.WriteLine();
+            Console.WriteLine(spacesVisitedByTail.Count);
+
+            Console.ReadLine();
         }
 
-        // Console.WriteLine(spacesVisitedByTail.Count);
-
-        // printGrid(grid, start, head, tail, spacesVisitedByTail);
-
-        // foreach (var space in spacesVisitedByTail)
+        // (int, int) new_tail;
+        // (int, int) tail_direction = calculateTailDirection(head, tail);
+        // if (tail_direction.Item1 != 0)
         // {
-        //     Console.Write(space);
-        //     Console.Write(", ");
+        //     int numTailSteps = Math.Abs(head.Item1 - tail.Item1) - 1;
+        //     for (int i=0; i < numTailSteps; i++)
+        //     {
+        //         new_tail.Item1 = tail.Item1 + tail_direction.Item1;
+        //         if (head.Item2 - tail.Item2 == 1)
+        //         {
+        //             new_tail.Item2 = tail.Item2 + 1;
+        //         }
+        //         else if (head.Item2 - tail.Item2 == -1)
+        //         {
+        //             new_tail.Item2 = tail.Item2 - 1;
+        //         }
+        //         else
+        //         {
+        //             new_tail.Item2 = tail.Item2;
+        //         }
+        //         tail = new_tail;
+        //         spacesVisitedByTail.Add(tail);
+        //     }
         // }
-        // Console.WriteLine();
+        // else if (tail_direction.Item2 != 0)
+        // {
+        //     int numTailSteps = Math.Abs(head.Item2 - tail.Item2) - 1;
+        //     for (int i=0; i < numTailSteps; i++)
+        //     {
+        //         new_tail.Item2 = tail.Item2 + tail_direction.Item2;
+        //         if (head.Item1 - tail.Item1 == 1)
+        //         {
+        //             new_tail.Item1 = tail.Item1 + 1;
+        //         }
+        //         else if (head.Item1 - tail.Item1 == -1)
+        //         {
+        //             new_tail.Item1 = tail.Item1 - 1;
+        //         }
+        //         else
+        //         {
+        //             new_tail.Item1 = tail.Item1;
+        //         }
+        //         tail = new_tail;
+        //         spacesVisitedByTail.Add(tail);
+        //     }
+        // }
+
         // Console.WriteLine(spacesVisitedByTail.Count);
 
-        // Console.ReadLine();
     }
 
     Console.WriteLine(spacesVisitedByTail.Count);
