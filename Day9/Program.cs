@@ -305,12 +305,20 @@ static void part2()
 
         for (int i=0; i < numSteps; i++)
         {
-
             (int, int) new_head;
             (int, int) head_direction = directionMap[direction];
             new_head.Item1 = head.Item1 + head_direction.Item1;
             new_head.Item2 = head.Item2 + head_direction.Item2;
             head = new_head;
+
+            (int, int) leadingKnot = head;
+            for (int j=0; j < knotPositions.Count; j++)
+            {
+                (int, int) currentKnot = knotPositions[j];
+                (int, int) newKnotPosition = calculateNextMove(currentKnot, leadingKnot);
+                knotPositions[j] = newKnotPosition;
+                leadingKnot = knotPositions[j];
+            }
 
             printGrid(grid, start, head, tail, spacesVisitedByTail);
 
@@ -319,6 +327,7 @@ static void part2()
                 Console.Write(space);
                 Console.Write(", ");
             }
+
             Console.WriteLine();
             Console.WriteLine(spacesVisitedByTail.Count);
 
