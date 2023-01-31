@@ -1,4 +1,4 @@
-﻿static void printGrid(string[,] grid, (int, int) start, (int, int) head, (int, int) tail, HashSet<(int, int)> spacesVisitedByTail)
+﻿static void printGrid(string[,] grid, (int, int) start, (int, int) head, (int, int) tail, HashSet<(int, int)> spacesVisitedByTail, List<(int, int)>? innerKnotPositions = default)
 {
     Console.WriteLine();
     for (int i=0; i < grid.GetLength(0); i++)
@@ -20,6 +20,10 @@
             else if (i == start.Item1 && j == start.Item2)
             {
                 Console.Write("s");
+            }
+            else if (innerKnotPositions != null && innerKnotPositions.Contains((i, j)))
+            {
+                Console.Write((innerKnotPositions.IndexOf((i, j))+1).ToString());
             }
             else
             {
@@ -274,12 +278,14 @@ static void part2()
 
     List<(int, int)> knotPositions = new List<(int, int)>();
     knotPositions.Add(start);
-    for (int i=1; i < 9; i++)
+    for (int i=1; i < 8; i++)
     {
         (int, int) knot = (halfMaxSteps, halfMaxSteps);
         knotPositions.Add(knot);
     }
     knotPositions.Add(tail);
+
+    Console.WriteLine($"Number of Knots: {knotPositions.Count}");
 
     // printGrid(grid, start, head, tail);
 
@@ -316,11 +322,17 @@ static void part2()
             {
                 (int, int) currentKnot = knotPositions[j];
                 (int, int) newKnotPosition = calculateNextMove(currentKnot, leadingKnot);
-                knotPositions[j] = newKnotPosition;
+                knotPositions[j] = (currentKnot.Item1 + newKnotPosition.Item1, currentKnot.Item2 + newKnotPosition.Item2);
                 leadingKnot = knotPositions[j];
             }
 
-            printGrid(grid, start, head, tail, spacesVisitedByTail);
+            (int, int) new_tail;
+            (int, int) tail_direction = calculateNextMove(tail, leadingKnot);
+            new_tail.Item1 = tail.Item1 + tail_direction.Item1;
+            new_tail.Item2 = tail.Item2 + tail_direction.Item2;
+            tail = new_tail;
+
+            printGrid(grid, start, head, tail, spacesVisitedByTail, knotPositions);
 
             foreach (var space in spacesVisitedByTail)
             {
