@@ -38,7 +38,8 @@ static (int, int) calculateNextMove((int, int) currentPosition, (int, int) targe
 {
     (int, int) targetDirection = (0, 0);
 
-    targetDirection = calculateTailDirection(currentPosition, targetPosition);
+    // targetDirection = calculateTailDirection(currentPosition, targetPosition);
+    targetDirection = calculateTailDirection(targetPosition, currentPosition);
 
     if (targetDirection.Item1 != 0)
     {
@@ -277,13 +278,13 @@ static void part2()
     (int, int) tail = (halfMaxSteps, halfMaxSteps);
 
     List<(int, int)> knotPositions = new List<(int, int)>();
-    knotPositions.Add(start);
-    for (int i=1; i < 8; i++)
+    // knotPositions.Add(start);
+    for (int i=0; i < 8; i++)
     {
         (int, int) knot = (halfMaxSteps, halfMaxSteps);
         knotPositions.Add(knot);
     }
-    knotPositions.Add(tail);
+    // knotPositions.Add(tail);
 
     Console.WriteLine($"Number of Knots: {knotPositions.Count}");
 
@@ -322,7 +323,8 @@ static void part2()
             {
                 (int, int) currentKnot = knotPositions[j];
                 (int, int) newKnotPosition = calculateNextMove(currentKnot, leadingKnot);
-                knotPositions[j] = (currentKnot.Item1 + newKnotPosition.Item1, currentKnot.Item2 + newKnotPosition.Item2);
+                currentKnot = (currentKnot.Item1 + newKnotPosition.Item1, currentKnot.Item2 + newKnotPosition.Item2);
+                knotPositions[j] = currentKnot;
                 leadingKnot = knotPositions[j];
             }
 
